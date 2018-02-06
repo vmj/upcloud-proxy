@@ -13,26 +13,26 @@ Main use case is to deploy this as an ambassador container in a Kubernetes Pod.
 
 Run this proxy from command line:
 
-  $ upcloud-proxy -username foo -password bar -addr localhost:8080 &
+    $ upcloud-proxy -username foo -password bar -addr localhost:8080 &
 
 or, alternatively, using Docker:
 
-  $ docker run -p 8080:8080 \
-    -e UPCLOUD_API_USERNAME=foo \
-    -e UPCLOUD_API_PASSWORD=bar \
-    vmj0/upcloud-proxy:latest
+    $ docker run -p 8080:8080 \
+      -e UPCLOUD_API_USERNAME=foo \
+      -e UPCLOUD_API_PASSWORD=bar \
+      vmj0/upcloud-proxy:latest
 
 Both of those would allow you to run
 
-  $ curl http://localhost:8080/1.2/account
+    $ curl http://localhost:8080/1.2/account
 
 and expect to get the UpCloud account info associated with 'foo' username.
 
 Without the proxy, the same request would have to be
 
-  $ curl -H "Authorization: Basic $(echo foo:bar |base64)" \
-    -H "Accept: application/json; charset=UTF-8" \
-    https://api.upcloud.com/1.2/account
+    $ curl -H "Authorization: Basic $(echo foo:bar |base64)" \
+      -H "Accept: application/json; charset=UTF-8" \
+      https://api.upcloud.com/1.2/account
 
 The proxy will add the `Authorization` and `Accept` headers.
 Also, if you're sending data, it will add the `Content-Type: application/json` header.
