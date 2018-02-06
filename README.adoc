@@ -1,18 +1,19 @@
 # UpCloud proxy
 
-UpCloud API ambassador:
-this proxy handles the authorization of the UpCloud API requests.
+Proxy that handles authentication and encryption of UpCloud API traffic.
 
-In other words, this proxy allows client to use plain HTTP
+In other words, this proxy allows clients to use plain HTTP
 without HTTP Basic authentication,
-and still the traffic from the proxy to the API is encrypted and authorized.
+and still the traffic from the proxy to the API is encrypted and authenticated.
 Think of `kubectl proxy`.
+
+Main use case is to deploy this as an ambassador container in a Kubernetes Pod.
 
 ## Usage
 
 Run this proxy from command line:
 
-  $ upcloud-proxy --username foo --password bar --addr localhost:8080 &
+  $ upcloud-proxy -username foo -password bar -addr localhost:8080 &
 
 or, alternatively, using Docker:
 
@@ -21,10 +22,17 @@ or, alternatively, using Docker:
     -e UPCLOUD_API_PASSWORD=bar \
     vmj0/upcloud-proxy:latest
 
-Both of those would allow you to:
+Both of those would allow you to run
 
   $ curl http://localhost:8080/1.2/account
 
 and expect to get the UpCloud account info associated with 'foo' username.
 
-Main use case, though, is to deploy this as an ambassador container in a Kubernetes Pod.
+Without the proxy, the same request would have to be
+
+  $ curl -H "Authorization: Basic $(echo foo:bar |base64)" \
+    -H "Accept: application/json; charset=UTF-8" \
+    https://api.upcloud.com/1.2/account
+
+The proxy will add the `Authorization` and `Accept` headers.
+Also, if you're sending data, it will add the `Content-Type: application/json` header.
