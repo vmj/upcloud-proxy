@@ -1,12 +1,13 @@
-FROM golang:1.9.3-stretch as build
+FROM vmj0/golang-dep:1.9.4-stretch-0.4.1 as build
 
-WORKDIR /go/src/
-COPY vendor/github.com ./github.com
-COPY upcloud-proxy.go ./upcloud-proxy.go
+WORKDIR /go/src/github.com/vmj/upcloud-proxy
 
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o upcloud-proxy
+COPY Gopkg.* *.go ./
+
+RUN dep ensure && \
+    CGO_ENABLED=0 go build -a -o upcloud-proxy
 
 FROM scratch
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=build /go/src/upcloud-proxy /
+COPY --from=build /go/src/github.com/vmj/upcloud-proxy/upcloud-proxy /
 CMD ["/upcloud-proxy"]
