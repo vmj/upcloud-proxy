@@ -85,9 +85,9 @@ func main() {
 		// Add upcloud-proxy to the User-Agent string
 		ua := req.Header.Get("User-Agent")
 		if ua == "" {
-			req.Header.Set("User-Agent", "upcloud-proxy/0.4")
+			req.Header.Set("User-Agent", "upcloud-proxy/0.4.1")
 		} else {
-			req.Header.Set("User-Agent", "upcloud-proxy/0.4 " + ua)
+			req.Header.Set("User-Agent", "upcloud-proxy/0.4.1 " + ua)
 		}
 
 		return req, nil
