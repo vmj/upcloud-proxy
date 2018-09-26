@@ -1,4 +1,4 @@
-FROM vmj0/golang-dep:1.10.3-stretch-0.5.0 as build
+FROM vmj0/golang-dep:1.11.0-stretch-0.5.0 as build
 
 WORKDIR /go/src/github.com/vmj/upcloud-proxy
 
